@@ -1,0 +1,66 @@
+{
+	"info": {
+		"_postman_id": "300a872a-7def-4de7-85e1-b8665912723c",
+		"name": "HSG-WAS-SS23-exercise-11",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Check Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:1880/was/rl/status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1880",
+					"path": [
+						"was",
+						"rl",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send Action",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\n  \"Z1Light\": true\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1880/was/rl/action",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1880",
+					"path": [
+						"was",
+						"rl",
+						"action"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

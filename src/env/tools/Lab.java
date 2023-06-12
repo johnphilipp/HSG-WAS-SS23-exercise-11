@@ -4,6 +4,8 @@ import java.io.IOException;
 import org.gradle.internal.impldep.com.google.common.collect.ImmutableSet;
 import java.util.*;
 import java.util.logging.*;
+import java.util.stream.IntStream;
+
 import com.google.common.collect.Sets;
 import ch.unisg.ics.interactions.wot.td.ThingDescription;
 import ch.unisg.ics.interactions.wot.td.ThingDescription.TDFormat;
@@ -251,6 +253,16 @@ public class Lab extends LearningEnvironment {
       return stateList.indexOf(this.currentState);
     }
 
+
+    public Integer[] getPossibleGoalDescription() {
+      return new Integer[]{this.currentState.get(0), this.currentState.get(1)};
+    }
+
+
+    public List<Integer> getFullCurrentState() {
+      return this.currentState;
+    }
+
     /**
     * @see {@link LearningEnvironment#getApplicableActions(int)}
     */
@@ -285,7 +297,6 @@ public class Lab extends LearningEnvironment {
 
       try {
         a.getRequest().execute();
-        LOGGER.info(a.getRequest().toString());
       } catch (IOException e) {
         LOGGER.severe(e.getMessage());
       }
@@ -348,9 +359,9 @@ public class Lab extends LearningEnvironment {
     private int discretizeLightLevel(Double value) {
       if (value < 50) {
         return 0;
-      } else if (value < 100) {
+      } else if (value < 200) {
         return 1;
-      } else if (value < 300) {
+      } else if (value < 400) {
         return 2;
       }
       return 3;

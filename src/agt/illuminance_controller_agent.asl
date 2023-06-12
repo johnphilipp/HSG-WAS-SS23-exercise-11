@@ -35,16 +35,42 @@ task_requirements([2,3]).
   .print("Hello world");
   .print("I want to achieve Z1Level=", Z1Level, " and Z2Level=",Z2Level);
 
-  // creates a QLearner artifact for learning the lab Thing described by the W3C WoT TD located at URL
-  makeArtifact("qlearner", "tools.QLearner", [Url], QLArtId);
+  makeArtifact("qlearner", "tools.QLearner", [Url], QLearnerArtId);
+  focus(QLearnerArtId);
 
-  // creates a ThingArtifact artifact for reading and acting on the state of the lab Thing
   makeArtifact("lab", "wot.ThingArtifact", [Url], LabArtId);
-  
-  // example use of the getActionFromState operation of the QLearner artifact
-  // relevant for Task 2.3
-  getActionFromState([1,1], [0, 0, false, false, false, false, 3], ActionTag, PayloadTags, Payload);
+  focus(LabArtId);
 
-  // example use of the invokeAction operation of the ThingArtifact 
-  //invokeAction(ActionTag, PayloadTags, Payload)
-  .
+  calculateQ([2,1], 50, 0.2, 0.8, 0.2, 100)[artifact_id(QLearnerArtId)];
+
+  getCurrentState(CurrentState)[artifact_id(QLearnerArtId)];
+  +current_state(CurrentState);
+
+  getCurrentFullState(CurrentFullState);
+  +current_full_state(CurrentFullState);
+
+  !exec(CurrentFullState).
+
+  +!exec(CurrentFullState): current_state([Z1State, Z2State]) &
+  task_requirements([Z1Goal, Z2Goal]) & Z1State == Z1Goal & Z2State == Z2Goal <-
+    .print("Reached Goal State!").
+
+  +!exec(CurrentFullState): true <-
+    .print("CurrentFullState: ", CurrentFullState);
+
+    getActionFromState([2,1], CurrentFullState, ActionTag, PayloadTags, Payload);
+    invokeAction(ActionTag, PayloadTags, Payload);
+    .abolish(current_state(_));
+
+    getCurrentState(NewCurrentState)[artifact_id(QLearnerArtId)];
+    +current_state(NewCurrentState);
+    .print("Current State: ", NewCurrentState);
+
+    ?task_requirements(Goal);
+    .print("Goal State: ", Goal);
+
+    getCurrentFullState(NewCurrentFullState);
+
+    .wait(2000);
+
+    !exec(NewCurrentFullState).
